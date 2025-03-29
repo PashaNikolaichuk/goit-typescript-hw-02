@@ -1,0 +1,14 @@
+.galleryImage {
+  width: 100%;
+  height: 250px;
+  display: block;
+}
+
+.img {
+  cursor: pointer;
+  transition: 1s;
+}
+
+.img:hover {
+  transform: scale(1.03);
+}
