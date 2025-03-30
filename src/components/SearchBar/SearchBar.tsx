@@ -1,13 +1,17 @@
 import { IoSearchOutline } from "react-icons/io5";
 import s from "./SearchBar.module.css";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import toast from "react-hot-toast";
 
-const SearchBar = ({ onSearchChanged }) => {
-  const [value, setValue] = useState("");
+interface SearchBarProps {
+  onSearchChanged: (value: string) => void;
+}
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+const SearchBar: React.FC<SearchBarProps> = ({ onSearchChanged }) => {
+  const [value, setValue] = useState<string>("");
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onSearchChanged(value);
     if (value === "") {
       toast.error("Please, you must enter text to search for an image");

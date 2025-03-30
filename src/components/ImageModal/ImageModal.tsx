@@ -3,7 +3,15 @@ import Modal from "react-modal";
 // Прив'язка до #root
 Modal.setAppElement("#root");
 
-const ImageModal = ({ isOpen, isClose, image }) => {
+import { Images } from "../../App/App.types";
+
+interface ImageModalProps {
+  isOpen: boolean;
+  isClose: () => void;
+  image: Images | null;
+}
+
+const ImageModal: React.FC<ImageModalProps> = ({ isOpen, isClose, image }) => {
   // Перевірка, чи існує об'єкт `image`
   if (!image) return null;
 

@@ -2,24 +2,30 @@ import s from "./App.module.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import SearchBar from "./components/SearchBar/SearchBar";
-import ImageGellerry from "./components/ImageGallery/ImageGallery";
-import Loader from "./components/Loader/Loader";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import LoadMore from "./components/LoadMore/LoadMore";
-import ImageModal from "./components/ImageModal/ImageModal";
+import SearchBar from "../components/SearchBar/SearchBar";
+import ImageGellerry from "../components/ImageGallery/ImageGallery";
+import Loader from "../components/Loader/Loader";
+import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
+import LoadMore from "../components/LoadMore/LoadMore";
+import ImageModal from "../components/ImageModal/ImageModal";
+
+import { Images } from "./App.types";
 
 axios.defaults.baseURL = "https://api.unsplash.com";
 const ACCESS_KEY = "VVseatpSLPosseFG869BSPFLd2UuQOjwEssniwICiuA";
 
+interface ApiResponse {
+  results: Images[];
+}
+
 const App = () => {
   //містить дані про зображення||функція для оновлення значення стану||Це означає, що на початку в стані немає зображень.
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [page, setPage] = useState(1);
-  const [query, setQuery] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [images, setImages] = useState<Images[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<Images | null>(null);
 
   useEffect(() => {
     const getImageData = async () => {
@@ -27,7 +33,7 @@ const App = () => {
       try {
         setIsLoading(true);
         setIsError(false);
-        const { data } = await axios.get("/search/photos", {
+        const { data } = await axios.get<ApiResponse>("/search/photos", {
           params: {
             query,
             page,
@@ -37,7 +43,7 @@ const App = () => {
             Authorization: `Client-ID ${ACCESS_KEY}`,
           },
         });
-
+        console.log("Отримали відповідь:", data);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         // Додавання нових зображень до існуючих                          // 2. Записуємо дані в стан images
         setImages((prev) => [...prev, ...data.results]);
@@ -60,7 +66,7 @@ const App = () => {
   };
 
   /////////////SearchBar/////////////
-  const handleChangeQuery = (newQuery) => {
+  const handleChangeQuery = (newQuery: string) => {
     setQuery(newQuery);
     //щоб старий результат зник а тільки новий був
     setImages([]);
@@ -68,7 +74,7 @@ const App = () => {
     setPage(1);
   };
 
-  const handleImageClick = (image) => {
+  const handleImageClick = (image: Images) => {
     setSelectedImage(image); // Встановлюємо вибране зображення
   };
 
@@ -100,5 +106,3 @@ const App = () => {
 };
 
 export default App;
-
-// alt_description, id, urls. Використовуй small версію для карток галереї, та regular, likes, created_at

@@ -1,6 +1,12 @@
 import s from "./ImageCard.module.css";
 
-const ImageCard = ({ image }) => {
+import { Images } from "../../App/App.types";
+
+interface ImageCardProps {
+  image: Images;
+}
+
+const ImageCard: React.FC<ImageCardProps> = ({ image }) => {
   return (
     <div className={s.img}>
       <img
